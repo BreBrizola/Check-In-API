@@ -17,11 +17,11 @@ public class ProfileDTO implements Serializable {
 
     private String phone;
 
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
 
-    private AddressDTO addressEntity;
+    private AddressDTO address;
 
-    private DriversLicenseDTO driversLicenseEntity;
+    private DriversLicenseDTO driversLicense;
 
     private LoginDTO login;
 }

@@ -1,6 +1,7 @@
 package com.example.Check_In_API.config;
 
 import com.example.Check_In_API.client.CarRentalRetroFitClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,17 +15,17 @@ public class RetroFitConfig {
     private static final String API_URL = "http://localhost:8090";
 
     @Bean
-    public Retrofit retroFitCarRental(){
+    public Retrofit retroFitCarRental(ObjectMapper objectMapper){
         return new Retrofit.Builder()
                 .client(new OkHttpClient())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .baseUrl(API_URL)
                 .build();
     }
 
     @Bean
-    public CarRentalRetroFitClient carRentalRetroFitClient(){
-        return retroFitCarRental().create(CarRentalRetroFitClient.class);
+    public CarRentalRetroFitClient carRentalRetroFitClient(Retrofit retrofit){
+        return retrofit.create(CarRentalRetroFitClient.class);
     }
 }

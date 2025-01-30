@@ -1,5 +1,6 @@
 package com.example.Check_In_API.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,9 +23,11 @@ public class ReservationDTO implements Serializable {
 
     private double totalPrice;
 
-    private LocalDate pickupDate;
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    private String pickupDate;
 
-    private LocalDate returnDate;
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    private String returnDate;
 
     private String pickupTime;
 

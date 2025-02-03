@@ -24,10 +24,10 @@ public class ReservationDTO implements Serializable {
     private double totalPrice;
 
     //@JsonFormat(pattern = "yyyy-MM-dd")
-    private String pickupDate;
+    private LocalDate pickupDate;
 
     //@JsonFormat(pattern = "yyyy-MM-dd")
-    private String returnDate;
+    private LocalDate returnDate;
 
     private String pickupTime;
 

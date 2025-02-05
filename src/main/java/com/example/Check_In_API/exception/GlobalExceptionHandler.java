@@ -23,4 +23,15 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ReservationNotEligibleForCheckInException.class)
+    public ResponseEntity<Object> handleReservationNotEligibleForCheckIn(ReservationNotFoundException ex, WebRequest request){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("error", "Check-in not allowed");
+        body.put("message", ex.getMessage());
+        body.put("path", request.getDescription(false));
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 }

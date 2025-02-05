@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.example.Check_In_API.enums.CheckInRedirectEnum.PROFILE_SEARCH;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.START;
 
 @RestController
@@ -30,4 +31,10 @@ public class CheckInController {
         return checkInService.getReservation(confirmationNumber, firstName, lastName)
                 .map(reservation -> new RedirectResponse(new Session(reservation), START));
     }
+
+    @GetMapping("/profile_search")
+    public Observable<RedirectResponse> redirectToProfileSearch(@RequestParam String confirmationNumber, String firstName, String lastName){
+        return checkInService.getReservation(confirmationNumber, firstName, lastName)
+                .map(reservation -> new RedirectResponse(new Session(reservation), PROFILE_SEARCH));
+    } //Quando for usar o Session do Redis da pra pegar os dados da sessao sem ter que passar os parametros de novo
 }

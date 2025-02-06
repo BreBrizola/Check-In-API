@@ -2,6 +2,7 @@ package com.example.Check_In_API.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 
 import java.io.Serializable;
 import java.time.LocalDate;

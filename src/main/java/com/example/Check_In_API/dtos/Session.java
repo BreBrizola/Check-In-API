@@ -1,14 +1,14 @@
 package com.example.Check_In_API.dtos;
 
-import com.example.Check_In_API.enums.CheckInRedirectEnum;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
-@Data
-public class Session {
-    private ReservationDTO reservation;
+import java.io.Serializable;
 
-    public Session(ReservationDTO reservation) {
-        this.reservation = reservation;
-    }
+@Data
+@JsonSerialize(as = Session.class)
+public class Session implements Serializable {
+
+    private ReservationDTO reservation;
 }
 

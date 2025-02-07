@@ -1,7 +1,6 @@
 package com.example.Check_In_API.service;
 
 import com.example.Check_In_API.client.CarRentalRetroFitClient;
-import com.example.Check_In_API.dtos.ReservationDTO;
 import com.example.Check_In_API.dtos.Session;
 import com.example.Check_In_API.exception.ReservationNotEligibleForCheckInException;
 import com.example.Check_In_API.exception.ReservationNotFoundException;

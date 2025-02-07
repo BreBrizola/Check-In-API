@@ -1,9 +1,7 @@
 package com.example.Check_In_API.dtos;
 
 import lombok.Data;
-
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 public class ProfileDTO implements Serializable {

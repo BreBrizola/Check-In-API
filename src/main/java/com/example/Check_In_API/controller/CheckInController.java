@@ -21,7 +21,6 @@ public class CheckInController {
         this.checkInService = checkInService;
     }
 
-
     @GetMapping("/retrieve")
     public Observable<RedirectResponse> getReservation(@RequestParam String confirmationNumber, String firstName, String lastName){
         return checkInService.getReservation(confirmationNumber, firstName, lastName)

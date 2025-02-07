@@ -1,9 +1,6 @@
 package com.example.Check_In_API.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,10 +21,8 @@ public class ReservationDTO implements Serializable {
 
     private double totalPrice;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate pickupDate;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate returnDate;
 
     private String pickupTime;
@@ -42,5 +37,5 @@ public class ReservationDTO implements Serializable {
 
     private VehicleDTO vehicle;
 
-    //private List<AdditionalProductDTO> additionalProducts;
+    private List<AdditionalProductDTO> additionalProducts;
 }

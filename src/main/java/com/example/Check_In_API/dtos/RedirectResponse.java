@@ -2,7 +2,6 @@ package com.example.Check_In_API.dtos;
 
 import com.example.Check_In_API.enums.CheckInRedirectEnum;
 import lombok.Data;
-
 import java.io.Serializable;
 
 @Data

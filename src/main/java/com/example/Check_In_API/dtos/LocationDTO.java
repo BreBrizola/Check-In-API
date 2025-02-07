@@ -1,7 +1,6 @@
 package com.example.Check_In_API.dtos;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
 @Data

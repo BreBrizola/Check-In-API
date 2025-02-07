@@ -6,23 +6,18 @@ import com.example.Check_In_API.dtos.Session;
 import com.example.Check_In_API.exception.ReservationNotEligibleForCheckInException;
 import com.example.Check_In_API.exception.ReservationNotFoundException;
 import io.reactivex.rxjava3.core.Observable;
-import okhttp3.MediaType;
-import okhttp3.ResponseBody;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import retrofit2.HttpException;
-import retrofit2.Response;
 
 import java.time.LocalDate;
 import java.time.Month;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class CheckInServiceTest {
@@ -43,13 +38,13 @@ class CheckInServiceTest {
 
         when(carRentalRetroFitClient.getReservation(anyString(), anyString(), anyString())).thenReturn(Observable.just(reservation));
 
-        assertThrows(ReservationNotEligibleForCheckInException.class, () -> checkInService.getReservation(anyString(), anyString(), anyString()).blockingFirst());
+        Assertions.assertThrows(ReservationNotEligibleForCheckInException.class, () -> checkInService.getReservation(anyString(), anyString(), anyString()).blockingFirst());
     }
 
     @Test
     public void givenReservation_whenReservationNotFound_thenThrowException() {
         when(carRentalRetroFitClient.getReservation(anyString(), anyString(), anyString())).thenThrow(new ReservationNotFoundException("reservation not found"));
 
-        assertThrows(ReservationNotFoundException.class, () -> checkInService.getReservation(anyString(), anyString(), anyString()).blockingFirst());
+        Assertions.assertThrows(ReservationNotFoundException.class, () -> checkInService.getReservation(anyString(), anyString(), anyString()).blockingFirst());
     }
 }

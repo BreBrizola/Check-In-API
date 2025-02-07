@@ -22,13 +22,13 @@ public class CheckInController {
     }
 
     @GetMapping("/retrieve")
-    public Observable<RedirectResponse> getReservation(@RequestParam String confirmationNumber, String firstName, String lastName){
+    public Observable<RedirectResponse> getReservation(@RequestParam String confirmationNumber, String firstName, String lastName) {
         return checkInService.getReservation(confirmationNumber, firstName, lastName)
                 .map(session -> new RedirectResponse(session, START));
     }
 
     @GetMapping("/profile_search")
-    public Observable<RedirectResponse> redirectToProfileSearch(){
+    public Observable<RedirectResponse> redirectToProfileSearch() {
         return Observable.just(new RedirectResponse(checkInService.getSession(),PROFILE_SEARCH));
     }
 }

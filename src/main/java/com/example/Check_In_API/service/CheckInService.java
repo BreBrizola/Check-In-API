@@ -22,12 +22,12 @@ public class CheckInService {
     @Getter
     private Session session;
 
-    public CheckInService(CarRentalRetroFitClient carRentalRetroFitClient, Session session){
+    public CheckInService(CarRentalRetroFitClient carRentalRetroFitClient, Session session) {
         this.carRentalRetroFitClient = carRentalRetroFitClient;
         this.session = session;
     }
 
-    public Observable<Session> getReservation(String confirmationNumber, String firstName, String lastName){
+    public Observable<Session> getReservation(String confirmationNumber, String firstName, String lastName) {
         return carRentalRetroFitClient.getReservation(confirmationNumber, firstName, lastName)
                 .flatMap(reservation -> {
                     try {
@@ -49,7 +49,7 @@ public class CheckInService {
                 });
     }
 
-    public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime){
+    public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {
         LocalTime pickupLocalTime = LocalTime.parse(pickupTime);
         LocalDateTime pickupDateTime = LocalDateTime.of(pickupDate, pickupLocalTime);
 

@@ -15,7 +15,7 @@ public class RetroFitConfig {
     private static final String API_URL = "http://localhost:8090";
 
     @Bean
-    public Retrofit retroFitCarRental(ObjectMapper objectMapper){
+    public Retrofit retroFitCarRental(ObjectMapper objectMapper) {
         return new Retrofit.Builder()
                 .client(new OkHttpClient())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
@@ -25,7 +25,7 @@ public class RetroFitConfig {
     }
 
     @Bean
-    public CarRentalRetroFitClient carRentalRetroFitClient(Retrofit retrofit){
+    public CarRentalRetroFitClient carRentalRetroFitClient(Retrofit retrofit) {
         return retrofit.create(CarRentalRetroFitClient.class);
     }
 }

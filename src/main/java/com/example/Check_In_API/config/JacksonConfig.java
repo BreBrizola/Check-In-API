@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Primary;
 public class JacksonConfig {
     @Bean
     @Primary
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);

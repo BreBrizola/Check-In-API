@@ -14,7 +14,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ReservationNotFoundException.class)
-    public ResponseEntity<Object> handleReservationNotFound(ReservationNotFoundException ex, WebRequest request){
+    public ResponseEntity<Object> handleReservationNotFound(ReservationNotFoundException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("error", "Object not found");
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ReservationNotEligibleForCheckInException.class)
-    public ResponseEntity<Object> handleReservationNotEligibleForCheckIn(ReservationNotFoundException ex, WebRequest request){
+    public ResponseEntity<Object> handleReservationNotEligibleForCheckIn(ReservationNotFoundException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("error", "Check-in not allowed");

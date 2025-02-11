@@ -22,4 +22,6 @@ public class ProfileDTO implements Serializable {
     private DriversLicenseDTO driversLicense;
 
     private LoginDTO login;
+
+    private boolean found;
 }

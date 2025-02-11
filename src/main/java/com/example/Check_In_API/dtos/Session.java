@@ -8,5 +8,6 @@ import java.io.Serializable;
 @JsonSerialize(as = Session.class)
 public class Session implements Serializable {
     private ReservationDTO reservation;
+    private ProfileDTO profile;
 }
 

@@ -1,21 +1,24 @@
 package com.example.Check_In_API.service;
 
 import com.example.Check_In_API.client.CarRentalRetroFitClient;
-import com.example.Check_In_API.dtos.ProfileDTO;
+import com.example.Check_In_API.dtos.RedirectResponse;
 import com.example.Check_In_API.dtos.Session;
+import com.example.Check_In_API.enums.CheckInRedirectEnum;
 import com.example.Check_In_API.exception.ReservationNotEligibleForCheckInException;
 import com.example.Check_In_API.exception.ReservationNotFoundException;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.functions.Function;
 import lombok.Getter;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import retrofit2.HttpException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Map;
+
+import static com.example.Check_In_API.enums.CheckInRedirectEnum.CREATE_PROFILE;
+import static com.example.Check_In_API.enums.CheckInRedirectEnum.DRIVER_DETAILS;
 
 @Service
 public class CheckInService {
@@ -52,8 +55,21 @@ public class CheckInService {
                 });
     }
 
-    public Observable<ProfileDTO> searchUserProfile(String driversLicenseNumber, String lastName, String issuingCountry, String issuingAuthority){
-        return carRentalRetroFitClient.searchUserProfile(driversLicenseNumber, lastName, issuingCountry, issuingAuthority);
+    public Maybe<RedirectResponse> searchUserProfile(String driversLicenseNumber, String lastName, String issuingCountry, String issuingAuthority){
+        return carRentalRetroFitClient.searchUserProfile(driversLicenseNumber, lastName, issuingCountry, issuingAuthority)
+                .map(profile -> {
+                    CheckInRedirectEnum redirect;
+
+                    if (profile.isFound()) {
+                        session.setProfile(profile);
+                        redirect = DRIVER_DETAILS;
+                    } else {
+                        session = new Session();
+                        redirect = CREATE_PROFILE;
+                    }
+
+                    return new RedirectResponse(session, redirect);
+                });
     }
 
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {

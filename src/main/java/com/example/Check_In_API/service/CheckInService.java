@@ -1,18 +1,21 @@
 package com.example.Check_In_API.service;
 
 import com.example.Check_In_API.client.CarRentalRetroFitClient;
+import com.example.Check_In_API.dtos.ProfileDTO;
 import com.example.Check_In_API.dtos.Session;
 import com.example.Check_In_API.exception.ReservationNotEligibleForCheckInException;
 import com.example.Check_In_API.exception.ReservationNotFoundException;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.functions.Function;
 import lombok.Getter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import retrofit2.HttpException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map;
 
 @Service
 public class CheckInService {
@@ -47,6 +50,10 @@ public class CheckInService {
                     }
                     return Observable.error(throwable);
                 });
+    }
+
+    public Observable<ProfileDTO> searchUserProfile(String driversLicenseNumber, String lastName, String issuingCountry, String issuingAuthority){
+        return carRentalRetroFitClient.searchUserProfile(driversLicenseNumber, lastName, issuingCountry, issuingAuthority);
     }
 
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {

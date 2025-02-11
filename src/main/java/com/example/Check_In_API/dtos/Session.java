@@ -7,7 +7,6 @@ import java.io.Serializable;
 @Data
 @JsonSerialize(as = Session.class)
 public class Session implements Serializable {
-
     private ReservationDTO reservation;
 }
 

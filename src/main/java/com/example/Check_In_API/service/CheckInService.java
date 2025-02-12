@@ -1,7 +1,9 @@
 package com.example.Check_In_API.service;
 
 import com.example.Check_In_API.client.CarRentalRetroFitClient;
+import com.example.Check_In_API.dtos.ProfileDTO;
 import com.example.Check_In_API.dtos.RedirectResponse;
+import com.example.Check_In_API.dtos.ReservationDTO;
 import com.example.Check_In_API.dtos.Session;
 import com.example.Check_In_API.enums.CheckInRedirectEnum;
 import com.example.Check_In_API.exception.ReservationNotEligibleForCheckInException;
@@ -16,9 +18,11 @@ import retrofit2.HttpException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.CREATE_PROFILE;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.DRIVER_DETAILS;
+import static com.example.Check_In_API.enums.CheckInRedirectEnum.RESERVATION_DETAILS;
 
 @Service
 public class CheckInService {
@@ -70,6 +74,29 @@ public class CheckInService {
 
                     return new RedirectResponse(session, redirect);
                 });
+    }
+
+    public Observable<RedirectResponse> updateDriverDetails(ProfileDTO updatedProfile){
+        return Observable.fromCallable(() -> {
+            ProfileDTO profile = session.getProfile();
+
+            LocalDate updatedExpirationDate = LocalDate.parse(updatedProfile.getDriversLicense().getLicenseExpirationDate());
+            if (updatedExpirationDate.isBefore(LocalDate.now())) {
+                throw new IllegalArgumentException("Driver license expiration date cannot be in the past");
+            }
+
+            String expirationDate = updatedExpirationDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+
+            profile.getDriversLicense().setLicenseExpirationDate(expirationDate);
+            profile.setAddress(updatedProfile.getAddress());
+            profile.setPhone(updatedProfile.getPhone());
+
+            ReservationDTO reservation = session.getReservation();
+
+            reservation.setProfile(profile);
+
+            return new RedirectResponse(session, RESERVATION_DETAILS);
+        });
     }
 
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {

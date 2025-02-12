@@ -77,6 +77,23 @@ public class CheckInService {
     }
 
     public Observable<RedirectResponse> updateDriverDetails(ProfileDTO updatedProfile){
+        String loyaltyNumber = session.getProfile().getLoyaltyNumber();
+        ReservationDTO reservation = session.getReservation();
+
+        return carRentalRetroFitClient.editProfile(loyaltyNumber, updatedProfile)
+                .flatMap(response -> {
+                    reservation.setProfile(updatedProfile);
+                    return carRentalRetroFitClient.updateReservation(
+                            reservation.getConfirmationNumber(),
+                            reservation.getFirstName(),
+                            reservation.getLastName(),
+                            reservation
+                    );
+                })
+                .map(updateResponse -> new RedirectResponse(session, RESERVATION_DETAILS));
+    }
+    /*
+    public Observable<RedirectResponse> updateDriverDetails(ProfileDTO updatedProfile){
         return Observable.fromCallable(() -> {
             ProfileDTO profile = session.getProfile();
 
@@ -98,6 +115,7 @@ public class CheckInService {
             return new RedirectResponse(session, RESERVATION_DETAILS);
         });
     }
+     */
 
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {
         LocalTime pickupLocalTime = LocalTime.parse(pickupTime);

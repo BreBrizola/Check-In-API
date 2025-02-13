@@ -28,7 +28,6 @@ public class CheckInService {
 
     private final CarRentalRetroFitClient carRentalRetroFitClient;
 
-    @Getter
     private Session session;
 
     public CheckInService(CarRentalRetroFitClient carRentalRetroFitClient, Session session) {
@@ -39,13 +38,9 @@ public class CheckInService {
     public Observable<Session> getReservation(String confirmationNumber, String firstName, String lastName) {
         return carRentalRetroFitClient.getReservation(confirmationNumber, firstName, lastName)
                 .flatMap(reservation -> {
-                    try {//
                         isEligibleForCheckIn(reservation.getPickupDate(), reservation.getPickupTime());
                         session.setReservation(reservation);
                         return Observable.just(session);
-                    } catch (ReservationNotEligibleForCheckInException ex) {
-                        return Observable.error(ex);
-                    }
                 })
                 .onErrorResumeNext((Function<Throwable, Observable<Session>>) throwable -> {
                     if (throwable instanceof HttpException) {
@@ -62,16 +57,26 @@ public class CheckInService {
         return carRentalRetroFitClient.searchUserProfile(driversLicenseNumber, lastName, issuingCountry, issuingAuthority)
                 .map(profile -> {
                     CheckInRedirectEnum redirect;
+                    session.setProfile(null);
 
                     if (profile.isFound()) {
                         session.setProfile(profile);
                         redirect = DRIVER_DETAILS;
                     } else {
-                        session = new Session(); //
                         redirect = CREATE_PROFILE;
                     }
 
                     return new RedirectResponse(session, redirect);
+                });
+    }
+
+    public Observable<RedirectResponse> createProfile(ProfileDTO profile){
+        return carRentalRetroFitClient.submitPersonalInformation(profile)
+                .map(response -> {
+                    session.setProfile(response);
+                    session.getReservation().setProfile(response);
+
+                    return new RedirectResponse(session, RESERVATION_DETAILS);
                 });
     }
 

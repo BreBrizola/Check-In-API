@@ -6,6 +6,7 @@ import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import retrofit2.http.Path;
@@ -30,4 +31,7 @@ public interface CarRentalRetroFitClient {
                                                  @Query("firstName") String firstName,
                                                  @Query("lastName") String lastName,
                                                  @Body ReservationDTO updatedReservation);
+
+    @POST("/enroll/createProfile")
+    Observable<ProfileDTO> submitPersonalInformation(@Body ProfileDTO profile);
 }

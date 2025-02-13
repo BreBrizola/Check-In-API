@@ -2,6 +2,7 @@ package com.example.Check_In_API.controller;
 
 import com.example.Check_In_API.dtos.ProfileDTO;
 import com.example.Check_In_API.dtos.RedirectResponse;
+import com.example.Check_In_API.dtos.Session;
 import com.example.Check_In_API.service.CheckInService;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
@@ -19,9 +20,12 @@ import static com.example.Check_In_API.enums.CheckInRedirectEnum.START;
 public class CheckInController {
 
     private CheckInService checkInService;
+
+    private Session session;
 //
-    public CheckInController(CheckInService checkInService){
+    public CheckInController(CheckInService checkInService, Session session){
         this.checkInService = checkInService;
+        this.session = session;
     }
 
     @GetMapping("/retrieve")
@@ -32,7 +36,7 @@ public class CheckInController {
 
     @GetMapping("/redirect_profile_search")
     public Observable<RedirectResponse> redirectToProfileSearch() {
-        return Observable.just(new RedirectResponse(checkInService.getSession(),PROFILE_SEARCH));
+        return Observable.just(new RedirectResponse(session ,PROFILE_SEARCH));
     }
 
     @GetMapping("/profile_search")
@@ -43,5 +47,10 @@ public class CheckInController {
     @PostMapping("/driver_details")
     public Observable<RedirectResponse> driverDetails(@RequestBody ProfileDTO updatedProfile){
         return checkInService.updateDriverDetails(updatedProfile);
+    }
+
+    @PostMapping("/create_profile")
+    public Observable<RedirectResponse> createProfile(@RequestBody ProfileDTO profile){
+        return checkInService.createProfile(profile);
     }
 }

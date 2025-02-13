@@ -18,7 +18,6 @@ import retrofit2.HttpException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.CREATE_PROFILE;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.DRIVER_DETAILS;
@@ -40,7 +39,7 @@ public class CheckInService {
     public Observable<Session> getReservation(String confirmationNumber, String firstName, String lastName) {
         return carRentalRetroFitClient.getReservation(confirmationNumber, firstName, lastName)
                 .flatMap(reservation -> {
-                    try {
+                    try {//
                         isEligibleForCheckIn(reservation.getPickupDate(), reservation.getPickupTime());
                         session.setReservation(reservation);
                         return Observable.just(session);
@@ -68,7 +67,7 @@ public class CheckInService {
                         session.setProfile(profile);
                         redirect = DRIVER_DETAILS;
                     } else {
-                        session = new Session();
+                        session = new Session(); //
                         redirect = CREATE_PROFILE;
                     }
 
@@ -82,7 +81,7 @@ public class CheckInService {
 
         return carRentalRetroFitClient.editProfile(loyaltyNumber, updatedProfile)
                 .flatMap(response -> {
-                    reservation.setProfile(updatedProfile);
+                    reservation.setProfile(response);
                     return carRentalRetroFitClient.updateReservation(
                             reservation.getConfirmationNumber(),
                             reservation.getFirstName(),
@@ -92,30 +91,6 @@ public class CheckInService {
                 })
                 .map(updateResponse -> new RedirectResponse(session, RESERVATION_DETAILS));
     }
-    /*
-    public Observable<RedirectResponse> updateDriverDetails(ProfileDTO updatedProfile){
-        return Observable.fromCallable(() -> {
-            ProfileDTO profile = session.getProfile();
-
-            LocalDate updatedExpirationDate = LocalDate.parse(updatedProfile.getDriversLicense().getLicenseExpirationDate());
-            if (updatedExpirationDate.isBefore(LocalDate.now())) {
-                throw new IllegalArgumentException("Driver license expiration date cannot be in the past");
-            }
-
-            String expirationDate = updatedExpirationDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-
-            profile.getDriversLicense().setLicenseExpirationDate(expirationDate);
-            profile.setAddress(updatedProfile.getAddress());
-            profile.setPhone(updatedProfile.getPhone());
-
-            ReservationDTO reservation = session.getReservation();
-
-            reservation.setProfile(profile);
-
-            return new RedirectResponse(session, RESERVATION_DETAILS);
-        });
-    }
-     */
 
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {
         LocalTime pickupLocalTime = LocalTime.parse(pickupTime);

@@ -11,17 +11,18 @@ import com.example.Check_In_API.exception.ReservationNotFoundException;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.functions.Function;
-import lombok.Getter;
 import org.springframework.stereotype.Service;
 import retrofit2.HttpException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.CREATE_PROFILE;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.DRIVER_DETAILS;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.RESERVATION_DETAILS;
+import static com.example.Check_In_API.enums.CheckInRedirectEnum.TERMS;
 
 @Service
 public class CheckInService {
@@ -95,6 +96,35 @@ public class CheckInService {
                     );
                 })
                 .map(updateResponse -> new RedirectResponse(session, RESERVATION_DETAILS));
+    }
+
+    public Observable<RedirectResponse> reservationDetails(ReservationDTO updatedReservation) {
+                    ReservationDTO existingReservation = session.getReservation();
+
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+                    LocalTime oldPickupTime = LocalTime.parse(existingReservation.getPickupTime(), dateTimeFormatter);
+                    LocalTime newPickTime = LocalTime.parse(updatedReservation.getPickupTime(), dateTimeFormatter);
+
+                    if(newPickTime.isBefore(oldPickupTime.minusHours(4)) || newPickTime.isAfter(oldPickupTime.plusHours(4))){
+                        return Observable.error(new IllegalArgumentException("PickUp time can only be altered in +4 or -4 hours from the original time."));
+                    }
+
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime pickUpDateTime = LocalDateTime.of(existingReservation.getPickupDate(), newPickTime);
+
+                    if(pickUpDateTime.isBefore(now)){
+                        return Observable.error(new IllegalArgumentException("PickUp time can't be in the past."));
+                    }
+
+                    existingReservation.setPickupTime(updatedReservation.getPickupTime());
+
+                    session.setReservation(existingReservation);
+
+                    return carRentalRetroFitClient.updateReservation(existingReservation.getConfirmationNumber(), existingReservation.getFirstName(),
+                                                              existingReservation.getLastName(), existingReservation)
+                            .ignoreElements()
+                            .andThen(Observable.just(new RedirectResponse(session, TERMS)));
     }
 
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {

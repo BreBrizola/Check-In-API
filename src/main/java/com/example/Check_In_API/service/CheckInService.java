@@ -5,6 +5,8 @@ import com.example.Check_In_API.dtos.ProfileDTO;
 import com.example.Check_In_API.dtos.RedirectResponse;
 import com.example.Check_In_API.dtos.ReservationDTO;
 import com.example.Check_In_API.dtos.Session;
+import com.example.Check_In_API.dtos.TermsDTO;
+import com.example.Check_In_API.dtos.VehicleDTO;
 import com.example.Check_In_API.enums.CheckInRedirectEnum;
 import com.example.Check_In_API.exception.ReservationNotEligibleForCheckInException;
 import com.example.Check_In_API.exception.ReservationNotFoundException;
@@ -18,6 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.CREATE_PROFILE;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.DRIVER_DETAILS;
@@ -125,6 +129,34 @@ public class CheckInService {
                                                               existingReservation.getLastName(), existingReservation)
                             .ignoreElements()
                             .andThen(Observable.just(new RedirectResponse(session, TERMS)));
+    }
+
+    public Observable<List<TermsDTO>> getVehicleTerms(){
+        return carRentalRetroFitClient.getVehicleTerms(session.getReservation().getVehicle().getId())
+                .map(terms -> {
+                    List<TermsDTO> activeTerms = new ArrayList<>();
+                    for(TermsDTO term : terms){
+                        if(term.isActive()){
+                            activeTerms.add(term);
+                        }
+                    }
+
+                    return activeTerms;
+    });
+    }
+
+    public Observable<List<TermsDTO>> getLocationTerms(){
+        return carRentalRetroFitClient.getLocationTerms(session.getReservation().getPickupLocation().getId())
+                .map(terms -> {
+                    List<TermsDTO> activeTerms = new ArrayList<>();
+                    for(TermsDTO term : terms){
+                        if(term.isActive()){
+                            activeTerms.add(term);
+                        }
+                    }
+
+                    return activeTerms;
+                });
     }
 
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {

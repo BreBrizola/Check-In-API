@@ -4,6 +4,7 @@ import com.example.Check_In_API.dtos.ProfileDTO;
 import com.example.Check_In_API.dtos.RedirectResponse;
 import com.example.Check_In_API.dtos.ReservationDTO;
 import com.example.Check_In_API.dtos.Session;
+import com.example.Check_In_API.dtos.TermsDTO;
 import com.example.Check_In_API.service.CheckInService;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.PROFILE_SEARCH;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.START;
 
@@ -58,5 +62,15 @@ public class CheckInController {
     @PostMapping("/reservation_details")
     public Observable<RedirectResponse> reservationDetails(@RequestBody ReservationDTO reservation){
         return checkInService.reservationDetails(reservation);
+    }
+
+    @GetMapping("/vehicle_terms")
+    public Observable<List<TermsDTO>> vehicleTerms(){
+        return checkInService.getVehicleTerms();
+    }
+
+    @GetMapping("/location_terms")
+    public Observable<List<TermsDTO>> locationTerms(){
+        return checkInService.getLocationTerms();
     }
 }

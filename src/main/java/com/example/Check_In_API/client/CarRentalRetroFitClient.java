@@ -1,7 +1,10 @@
 package com.example.Check_In_API.client;
 
+import com.example.Check_In_API.dtos.LocationDTO;
 import com.example.Check_In_API.dtos.ProfileDTO;
 import com.example.Check_In_API.dtos.ReservationDTO;
+import com.example.Check_In_API.dtos.TermsDTO;
+import com.example.Check_In_API.dtos.VehicleDTO;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
@@ -10,6 +13,8 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import retrofit2.http.Path;
+
+import java.util.List;
 
 public interface CarRentalRetroFitClient {
     @GET("/reservation/retrieve")
@@ -34,4 +39,10 @@ public interface CarRentalRetroFitClient {
 
     @POST("/enroll/createProfile")
     Observable<ProfileDTO> submitPersonalInformation(@Body ProfileDTO profile);
+
+    @GET("/terms/vehicle")
+    Observable<List<TermsDTO>> getVehicleTerms(@Query("id") Long vehicleId);
+
+    @GET("/terms/location")
+    Observable<List<TermsDTO>> getLocationTerms(@Query("id") Long locationId);
 }

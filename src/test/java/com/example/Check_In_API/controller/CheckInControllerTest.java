@@ -25,6 +25,9 @@ class CheckInControllerTest {
     @InjectMocks
     private CheckInController checkInController;
 
+    @Mock
+    private Session session;
+
     @Test
     public void givenSearchParams_whenGetReservation_thenReturnReservation() {
         when(checkInService.getReservation(anyString(), anyString(), anyString())).thenReturn(Observable.just(new Session()));
@@ -36,7 +39,7 @@ class CheckInControllerTest {
 
     @Test
     public void givenReservation_whenRedirectToProfileSearch_thenRedirectToProfileSearch(){
-        when(checkInService.getSession()).thenReturn(new Session());
+        //when(checkInService.getSession()).thenReturn(new Session());
         
         RedirectResponse response = checkInController.redirectToProfileSearch().blockingFirst();
 

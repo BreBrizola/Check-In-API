@@ -48,6 +48,7 @@ class CheckInServiceTest {
 
     @Test
     public void givenReservation_whenReservationIsNotEligibleForCheckin_thenThrowException() {
+        ReservationDTO reservation = new ReservationDTO();
         reservation.setPickupDate(LocalDate.of(2025, Month.JANUARY,1));
         reservation.setPickupTime("16:00");
 

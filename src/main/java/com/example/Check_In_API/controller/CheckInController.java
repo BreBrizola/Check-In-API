@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.example.Check_In_API.enums.CheckInRedirectEnum.CONFIRMATION;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.PROFILE_SEARCH;
 import static com.example.Check_In_API.enums.CheckInRedirectEnum.START;
 
@@ -72,5 +73,10 @@ public class CheckInController {
     @GetMapping("/location_terms")
     public Observable<List<TermsDTO>> locationTerms(){
         return checkInService.getLocationTerms();
+    }
+
+    @GetMapping("/redirect_confirmation")
+    public Observable<RedirectResponse> redirectToConfirmation() {
+        return Observable.just(new RedirectResponse(session ,CONFIRMATION));
     }
 }

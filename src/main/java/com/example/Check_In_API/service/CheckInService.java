@@ -159,6 +159,17 @@ public class CheckInService {
                 });
     }
 
+    public Observable<ReservationDTO> confirmation(){
+        ReservationDTO activeReservation = session.getReservation();
+
+        if (activeReservation == null) {
+            return Observable.error(new ReservationNotFoundException("No active reservation found"));
+        }
+
+        activeReservation.setProfile(null); //to only show the reservation information
+        return Observable.just(activeReservation);
+    }
+
     public void isEligibleForCheckIn(LocalDate pickupDate, String pickupTime) {
         LocalTime pickupLocalTime = LocalTime.parse(pickupTime);
         LocalDateTime pickupDateTime = LocalDateTime.of(pickupDate, pickupLocalTime);

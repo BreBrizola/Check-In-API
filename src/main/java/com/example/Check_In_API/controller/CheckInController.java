@@ -79,4 +79,9 @@ public class CheckInController {
     public Observable<RedirectResponse> redirectToConfirmation() {
         return Observable.just(new RedirectResponse(session ,CONFIRMATION));
     }
+
+    @GetMapping("/confirmation")
+    public Observable<ReservationDTO> confirmation(){
+        return checkInService.confirmation();
+    }
 }

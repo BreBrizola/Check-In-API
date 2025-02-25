@@ -1,5 +1,7 @@
 package com.example.Check_In_API.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -11,12 +13,20 @@ public class ReservationDTO implements Serializable {
 
     private String confirmationNumber;
 
+    @NotBlank(message = "First name is required")
+    @Size(min = 1, max = 30)
     private String firstName;
 
+    @NotBlank(message = "Last name is required")
+    @Size(min = 1, max = 80)
     private String lastName;
 
+    @NotBlank(message = "Email is required")
+    @Size(min = 1, max = 100)
     private String email;
 
+    @NotBlank(message = "Phone number is required")
+    @Size(min = 20, max = 20)
     private String phone;
 
     private double totalPrice;

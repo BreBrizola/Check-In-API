@@ -123,40 +123,20 @@ public class CheckInService {
 
                     existingReservation.setPickupTime(updatedReservation.getPickupTime());
 
-                    session.setReservation(existingReservation);
-
                     return carRentalRetroFitClient.updateReservation(existingReservation.getConfirmationNumber(), existingReservation.getFirstName(),
                                                               existingReservation.getLastName(), existingReservation)
-                            .ignoreElements()
-                            .andThen(Observable.just(new RedirectResponse(session, TERMS)));
+                            .doOnNext(response -> session.setReservation(existingReservation))
+                            .flatMap(response -> Observable.just(new RedirectResponse(session, TERMS)));
     }
 
     public Observable<List<TermsDTO>> getVehicleTerms(){
         return carRentalRetroFitClient.getVehicleTerms(session.getReservation().getVehicle().getId())
-                .map(terms -> {
-                    List<TermsDTO> activeTerms = new ArrayList<>();
-                    for(TermsDTO term : terms){
-                        if(term.isActive()){
-                            activeTerms.add(term);
-                        }
-                    }
-
-                    return activeTerms;
-    });
+                .map(terms -> terms.stream().filter(TermsDTO::isActive).toList());
     }
 
     public Observable<List<TermsDTO>> getLocationTerms(){
         return carRentalRetroFitClient.getLocationTerms(session.getReservation().getPickupLocation().getId())
-                .map(terms -> {
-                    List<TermsDTO> activeTerms = new ArrayList<>();
-                    for(TermsDTO term : terms){
-                        if(term.isActive()){
-                            activeTerms.add(term);
-                        }
-                    }
-
-                    return activeTerms;
-                });
+                .map(terms -> terms.stream().filter(TermsDTO::isActive).toList());
     }
 
     public Observable<ReservationDTO> confirmation(){
@@ -166,7 +146,6 @@ public class CheckInService {
             return Observable.error(new ReservationNotFoundException("No active reservation found"));
         }
 
-        activeReservation.setProfile(null); //to only show the reservation information
         return Observable.just(activeReservation);
     }
 

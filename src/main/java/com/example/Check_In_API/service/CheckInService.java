@@ -66,6 +66,7 @@ public class CheckInService {
 
                     if (profile.isFound()) {
                         session.setProfile(profile);
+                        //session.getReservation().setProfile(profile);
                         redirect = DRIVER_DETAILS;
                     } else {
                         redirect = CREATE_PROFILE;

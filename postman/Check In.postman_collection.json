@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "7186fbc2-9520-4488-86b8-c8e337a91a5a",
+		"name": "Check In",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38351808"
+	},
+	"item": [
+		{
+			"name": "Docs",
+			"item": [
+				{
+					"name": "docs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api-docs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Retrieve",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/checkIn/retrieve?confirmationNumber=7329692510&firstName=Brenda&lastName=Brizola",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"checkIn",
+						"retrieve"
+					],
+					"query": [
+						{
+							"key": "confirmationNumber",
+							"value": "7329692510"
+						},
+						{
+							"key": "firstName",
+							"value": "Brenda"
+						},
+						{
+							"key": "lastName",
+							"value": "Brizola"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Redirect profile search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/checkIn/redirect_profile_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"checkIn",
+						"redirect_profile_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Profile search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/checkIn/profile_search?driversLicenseNumber=D123456789&lastName=Doe&issuingCountry=USA&issuingAuthority=CA",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"checkIn",
+						"profile_search"
+					],
+					"query": [
+						{
+							"key": "driversLicenseNumber",
+							"value": "D123456789"
+						},
+						{
+							"key": "lastName",
+							"value": "Doe"
+						},
+						{
+							"key": "issuingCountry",
+							"value": "USA"
+						},
+						{
+							"key": "issuingAuthority",
+							"value": "CA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Driver details",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"driversLicense\": {\n    \"licenseExpirationDate\": \"2025-12-31\"\n  },\n  \"address\": {\n    \"city\": \"Springfield\",\n    \"country\": \"USA\",\n    \"countrySubdivisionCode\": \"IL\",\n    \"postal\": \"62704\",\n    \"streetAddresses\": \"123 Main Street\"\n  },\n  \"phone\": \"+1 555-1234\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/checkIn/driver_details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"checkIn",
+						"driver_details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create profile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Brenda\",\n  \"lastName\": \"Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"phone\": \"+11 98765 9812\",\n  \"dateOfBirth\": \"1995-05-10\",\n  \"address\": {\n    \"city\": \"Anytown\",\n    \"country\": \"USA\",\n    \"countrySubdivisionCode\": \"CA\",\n    \"postal\": \"12345\",\n    \"streetAddresses\": \"123 Main St\"\n  },\n  \"driversLicense\": {\n    \"countryCode\": \"USA\",\n    \"countrySubdivision\": \"CA\",\n    \"licenseExpirationDate\": \"2025-05-10\",\n    \"licenseNumber\": \"D123456789\"\n  },\n  \"login\": {\n    \"username\": \"john.doe\",\n    \"password\": \"password123\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/checkIn/create_profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"checkIn",
+						"create_profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservation details",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/checkIn/reservation_details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"checkIn",
+						"reservation_details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vehicle terms",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Location terms",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Redirect to confirmation",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Confirmation",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
